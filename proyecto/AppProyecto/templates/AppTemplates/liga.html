@@ -1,0 +1,16 @@
+{% extends "AppTemplates/padre.html" %}
+
+{% load static %}
+
+{% block titulo %}Ligas{% endblock %}
+
+{% block contenido_que_cambia %}
+    
+    <h1>Ligas</h1>
+    <ul>
+        {% for una_liga in ligas %}
+            <li>{{ una_liga.nombre }}</li>
+        {% endfor %}
+    </ul>
+    
+{% endblock %}
