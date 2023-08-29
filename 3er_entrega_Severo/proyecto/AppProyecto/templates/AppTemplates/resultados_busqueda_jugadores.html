@@ -1,0 +1,23 @@
+{% extends "AppTemplates/padre.html" %}
+
+{% block titulo %}Resultados de Búsqueda{% endblock %}
+
+{% block contenido_que_cambia %}
+    <h1>Resultados de Búsqueda</h1>
+    
+    <form method="get" action="{% url 'resultados_busqueda_jugadores' %}">
+        {{ form.as_p }}
+        <input type="submit" value="Buscar">
+    </form>
+    
+    {% if jugadores %}
+        <ul>
+            {% for un_jugador in jugadores %}
+                <li>{{ un_jugador.nombre }} - {{ un_jugador.edad }} - {{ un_jugador.equipo_actual }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No hay resultados para los datos ingresados.</p>
+    {% endif %}
+{% endblock %}
+

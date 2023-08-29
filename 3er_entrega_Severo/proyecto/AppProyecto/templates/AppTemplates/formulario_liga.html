@@ -1,13 +1,16 @@
 {% extends "AppTemplates/padre.html" %}
 
-{% block titulo %}Formulario Ligas{% endblock %}
+{% block titulo %}Formulario Liga{% endblock %}
 
 {% block contenido_que_cambia %}
+
     <h1>Formulario</h1>
-    <form method="post">
+    {% if mensaje %}
+        <h2>{{ mensaje }}</h2>
+    {% endif %}
+    <form action="{% url "formulario_liga" %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Enviar</button>
+        <input type="submit" value="Guardar liga">
     </form>
 {% endblock %}
-

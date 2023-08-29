@@ -9,9 +9,9 @@ class equipo (models.Model):
 class jugador (models.Model):
     nombre = models.CharField(max_length=100)
     edad = models.IntegerField()
-    equipo = models.CharField(max_length=100)
+    equipo_actual = models.CharField(max_length=100)
     def  __str__(self):
-        return f"{self.nombre} - {self.edad} - {self.equipo}"
+        return f"{self.nombre} - {self.edad} - {self.equipo_actual}"
     
     
 

@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import equipo, jugador, liga
+from .forms import LigaForm, EquipoForm, JugadorForm
 
 def ingresar_equipo(request):
     nombre_equipo = "Nacional"
@@ -40,17 +41,67 @@ def ver_ligas(request):
     ligas_lista = liga.objects.all()  
     return render(request, "AppTemplates/liga.html", {"ligas": ligas_lista})
 
+#FORMULARIOS
+
+def formulario_jugadores(request):
+    if request.method == "POST":
+        form = JugadorForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, "AppTemplates/formulario_jugador.html", {"mensaje": "Jugador creado", "form": form})
+        else:
+            return render(request, "AppTemplates/formulario_jugador.html", {"mensaje": "Datos inválidos", "form": form})
+    else:
+        form = JugadorForm()
+
+    return render(request, "AppTemplates/formulario_jugador.html", {"form": form})
+
+
 def formulario_equipo(request):
-    return render(request, "AppTemplates/formulario_equipo.html")
+    if request.method == "POST":
+        form = EquipoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, "AppTemplates/formulario_equipo.html", {"mensaje": "Equipo creado", "form": form})
+        else:
+            return render(request, "AppTemplates/formulario_equipo.html", {"mensaje": "Datos inválidos", "form": form})
+    else:
+        form = EquipoForm()
+
+    return render(request, "AppTemplates/formulario_equipo.html", {"form": form})
 
 
 def formulario_ligas(request):
-    ligas = liga.objects.all()  
-    return render(request, "AppTemplates/formulario_liga.html", {"ligas": ligas})
+    if request.method == "POST":
+        form = LigaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, "AppTemplates/formulario_liga.html", {"mensaje": "Liga creada", "form": form})
+        else:
+            return render(request, "AppTemplates/formulario_liga.html", {"mensaje": "Datos inválidos", "form": form})
+        
+        
+    else:
+        form = LigaForm()
+
+    return render(request, "AppTemplates/formulario_liga.html", {"form": form})
+
+#BUSQUEDA
+
+from .forms import BusquedaJugadorForm
+
+def resultados_busqueda_jugadores(request):
+    form = BusquedaJugadorForm(request.GET)
+    jugadores = []
+
+    if form.is_valid():
+        nombre_jugador = form.cleaned_data['nombre_jugador']
+        jugadores = jugador.objects.filter(nombre__icontains=nombre_jugador)
+
+    return render(request, "AppTemplates/resultados_busqueda_jugadores.html", {"jugadores": jugadores, "form": form})
 
 
-def formulario_jugadores(request):
-    jugadores = jugador.objects.all()  
-    return render(request, "AppTemplates/formulario_jugador.html", {"jugadores": jugadores})
+
+
 
     
