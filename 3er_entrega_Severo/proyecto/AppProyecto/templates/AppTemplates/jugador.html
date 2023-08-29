@@ -1,0 +1,17 @@
+{% extends "AppTemplates/padre.html" %}
+
+{% load static %}
+
+{% block titulo %}Jugadores{% endblock %}
+
+{% block contenido_que_cambia %}
+    
+    <h1>Jugadores</h1>
+    <ul>
+        {% for un_jugador in jugadores %}
+            <li>{{ un_jugador.nombre }} - {{ un_jugador.edad }} - {{ un_jugador.equipo }}</li>
+        {% endfor %}
+    </ul>
+    
+{% endblock %}
+

@@ -1,0 +1,19 @@
+{% extends "AppTemplates/padre.html" %}
+
+{% block titulo %}Formulario Jugador{% endblock %}
+
+{% block contenido_que_cambia %}
+
+    <h1>Formulario</h1>
+    {% if mensaje %}
+        <h2>{{ mensaje }}</h2>
+    {% endif %}
+    <form action="{% url "formulario_jugador" %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Guardar jugador">
+    </form>
+{% endblock %}
+
+
+
