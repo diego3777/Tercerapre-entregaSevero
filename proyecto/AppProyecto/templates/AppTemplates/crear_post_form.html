@@ -1,0 +1,12 @@
+{% extends "AppTemplates/padre.html" %}
+
+{% block titulo %}Cargar Nuevo Post{% endblock %}
+
+{% block contenido_que_cambia %}
+    <h1>Cargar Nuevo Post</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Guardar</button>
+    </form>
+{% endblock %}

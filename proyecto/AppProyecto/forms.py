@@ -1,5 +1,7 @@
 from django import forms
 from .models import equipo, jugador, liga
+from .models import Post  
+from django.forms import ImageField
 
 class EquipoForm(forms.ModelForm):
     class Meta:
@@ -20,3 +22,11 @@ class LigaForm(forms.ModelForm):
         
 class BusquedaJugadorForm(forms.Form):
     nombre_jugador = forms.CharField(label='Nombre del jugador', max_length=100)
+    
+    
+class PostForm(forms.ModelForm):
+    imagen = ImageField(required=False)  
+
+    class Meta:
+        model = Post
+        fields = ['titulo', 'contenido', 'imagen']
