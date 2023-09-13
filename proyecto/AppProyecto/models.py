@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+
 class equipo (models.Model):
     nombre = models.CharField(max_length=100)
     divisional = models.CharField(max_length=100)
@@ -44,12 +45,15 @@ class Post(models.Model):
 
 
 
-#class UserProfile(models.Model):
- #   usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-  #  nombre = models.CharField(max_length=50)
-   # apellido = models.CharField(max_length=50)
-    #fecha_nacimiento = models.DateField()  
-    #email = models.EmailField()
-   
-    #def __str__(self):
-     #   return self.usuario.username
+class UserProfile(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    nombre = models.CharField(max_length=50)
+    apellido = models.CharField(max_length=50)
+    fecha_nacimiento = models.DateField()
+    email = models.EmailField()
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
+
+    def __str__(self):
+        return self.usuario.username
+    
+    

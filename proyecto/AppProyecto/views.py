@@ -1,11 +1,18 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import equipo, jugador, liga, Post
+from .models import equipo, jugador, liga, Post, UserProfile
 from .forms import LigaForm, EquipoForm, JugadorForm
 from django.shortcuts import get_object_or_404
 from .forms import PostForm
 from .models import Post
 from django.utils.html import escape
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LogoutView
+from django.contrib.auth.forms import UserCreationForm
+from .forms import UserProfileForm
+from django.contrib import messages 
+
+
 
 def ingresar_equipo(request):
     nombre_equipo = "Nacional"
@@ -123,6 +130,7 @@ def create_post(request):
         return redirect('home')
     return render(request, 'blog/create_post.html')
 
+@login_required(login_url='iniciar_sesion')
 def cargar_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
@@ -137,20 +145,44 @@ def cargar_post(request):
     return render(request, 'AppTemplates/crear_post_form.html', {'form': form})
 
 def mostrar_posts(request):
-    posts = Post.objects.all()  
-    return render(request, 'tu_template.html', {'posts': posts})
+    posts = Post.objects.all().order_by('-datos_publicacion')[:5]
+    return render(request, 'AppTemplates/inicio.html', {'posts': posts})
 
 from django.shortcuts import render
 from .models import Post
 
-def publicaciones_recientes(request):
-    publicaciones = Post.objects.all().order_by('-fecha_de_publicacion')[:5]  
-    return render(request, 'tu_plantilla.html', {'publicaciones': publicaciones})
+
 
 #LOGIN
 
 from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
+
+
+def registro_usuario(request):
+    if request.method == 'POST':
+        user_form = UserCreationForm(request.POST)
+        profile_form = UserProfileForm(request.POST, request.FILES)
+        if user_form.is_valid() and profile_form.is_valid():
+            user = user_form.save()
+            profile = profile_form.save(commit=False)
+            profile.usuario = user
+            profile.save()
+            login(request, user)
+            messages.success(request, "¡Registro exitoso!")  # Mensaje de éxito
+            return redirect('inicio') 
+        else:
+            messages.error(request, "Por favor, corrige los errores en el formulario.")  # Mensaje de error
+    else:
+        user_form = UserCreationForm()
+        profile_form = UserProfileForm()
+
+    return render(
+        request,
+        'registro_usuario.html',
+        {'user_form': user_form, 'profile_form': profile_form}
+    )
+
+
 
 def iniciar_sesion(request):
     if request.method == 'POST':
@@ -165,8 +197,20 @@ def iniciar_sesion(request):
             return render(request, 'login.html', {'error_message': 'Credenciales inválidas'})
     return render(request, 'login.html')
 
+@login_required
+def custom_logout(request):
+    return LogoutView.as_view()(request)
 
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .models import UserProfile
+from .forms import UserProfileForm
+
+@login_required
+def view_profile(request):
+    profile = UserProfile.objects.get(usuario=request.user)
+    return render(request, 'ver_perfil.html', {'profile': profile})
 
 
 

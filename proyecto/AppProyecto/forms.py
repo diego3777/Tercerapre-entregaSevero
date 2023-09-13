@@ -2,6 +2,7 @@ from django import forms
 from .models import equipo, jugador, liga
 from .models import Post  
 from django.forms import ImageField
+from .models import UserProfile
 
 class EquipoForm(forms.ModelForm):
     class Meta:
@@ -30,3 +31,8 @@ class PostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['titulo', 'contenido', 'imagen']
+        
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['nombre', 'apellido', 'fecha_nacimiento', 'email', 'avatar']

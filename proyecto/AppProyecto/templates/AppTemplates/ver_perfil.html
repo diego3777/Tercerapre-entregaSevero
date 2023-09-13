@@ -1,0 +1,27 @@
+{% extends "padre.html" %}
+
+{% block titulo %}
+    Perfil de {{ profile.usuario.username }}
+{% endblock %}
+
+{% block contenido_que_cambia %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">Perfil de {{ profile.usuario.username }}</h2>
+                        <p>Nombre: {{ profile.nombre }}</p>
+                        <p>Apellido: {{ profile.apellido }}</p>
+                        <p>Fecha de Nacimiento: {{ profile.fecha_nacimiento }}</p>
+                        <p>Email: {{ profile.email }}</p>
+                        {% if profile.avatar %}
+                            <img src="{{ profile.avatar.url }}" alt="Avatar">
+                        {% endif %}
+                        <a href="{% url 'edit_profile' %}" class="btn btn-primary">Editar Perfil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
